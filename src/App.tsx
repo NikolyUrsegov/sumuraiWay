@@ -6,8 +6,27 @@ import Profile from "./components/Profile/Profile";
 import Dialogs from "./components/Dialogs/Dialogs";
 import {BrowserRouter, Route} from "react-router-dom";
 
+export type DialogType = {
+    id: number
+    name: string
+}
+export type MessageType = {
+    id: number
+    message: string
+}
+export type PostsDataType = {
+    id: number
+    post: string
+    likeCount: number
+}
 
-function App() {
+type AppPropsType ={
+    dialogsDate: DialogType[]
+    messagesData: MessageType[]
+    postsData: PostsDataType[]
+}
+
+function App(props: AppPropsType) {
     return (
         <BrowserRouter>
             <div className={'app-wrapper'}>
@@ -15,8 +34,8 @@ function App() {
                 <NavBar/>
                 <div className={'app-wrapper-content'}>
                     {/*<Profile/>*/}
-                    <Route path='/profile' component={Profile}/>
-                    <Route path="/dialog" component={Dialogs}/>
+                    <Route path='/profile' render={() => <Profile postsData={props.postsData}/>}/>
+                    <Route path="/dialog" render={() => <Dialogs messagesData={props.messagesData} dialogsData={props.dialogsDate}/>}/>
                 </div>
             </div>
         </BrowserRouter>

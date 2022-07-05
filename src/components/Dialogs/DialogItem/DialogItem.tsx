@@ -1,9 +1,9 @@
 import React from 'react';
-import s from "./Dialog.module.css";
+import s from "./DialogItem.module.css";
 import {NavLink} from "react-router-dom";
 
 type DialogItemPropsType = {
-    id: string
+    id: string | number
     name: string
 }
 
