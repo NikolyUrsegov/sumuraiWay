@@ -19,11 +19,23 @@ export type PostsDataType = {
     post: string
     likeCount: number
 }
+export type FriendType = {
+    img: string,
+    name: string,
+    id: number
+}
 
-type AppPropsType ={
-    dialogsDate: DialogType[]
-    messagesData: MessageType[]
-    postsData: PostsDataType[]
+type AppPropsType = {
+    dialogsState: {
+        dialogsData: DialogType[],
+        messagesData: MessageType[]
+    }
+    profileState: {
+        postsData: PostsDataType[]
+    }
+    sidebarState: {
+        friends: FriendType[]
+    }
 }
 
 function App(props: AppPropsType) {
@@ -31,11 +43,13 @@ function App(props: AppPropsType) {
         <BrowserRouter>
             <div className={'app-wrapper'}>
                 <Header/>
-                <NavBar/>
+                <NavBar sidebar={props.sidebarState}/>
                 <div className={'app-wrapper-content'}>
-                    {/*<Profile/>*/}
-                    <Route path='/profile' render={() => <Profile postsData={props.postsData}/>}/>
-                    <Route path="/dialog" render={() => <Dialogs messagesData={props.messagesData} dialogsData={props.dialogsDate}/>}/>
+                    <Route path='/profile'
+                           render={() => <Profile postsData={props.profileState.postsData}/>}/>
+                    <Route path="/dialog"
+                           render={() => <Dialogs messagesData={props.dialogsState.messagesData}
+                                                  dialogsData={props.dialogsState.dialogsData}/>}/>
                 </div>
             </div>
         </BrowserRouter>
