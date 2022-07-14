@@ -2,7 +2,7 @@ import React from 'react';
 import s from './Dialog.module.css'
 import DialogItem from "./DialogItem/DialogItem";
 import Message from "./Message/Message";
-import {DialogType, MessageType} from "../../App";
+import {DialogType, MessageType} from "../../redux/state";
 
 type DialogsPropsType = {
     dialogsData: DialogType[]
@@ -20,6 +20,10 @@ const Dialogs = (props: DialogsPropsType) => {
                 {props.messagesData.map(el => (
                     <Message message={el.message} key={el.id}/>
                 ))}
+            </div>
+            <div>
+                <textarea></textarea>
+                <button>add</button>
             </div>
         </div>
     );

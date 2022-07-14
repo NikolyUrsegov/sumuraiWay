@@ -1,10 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App, {DialogType, MessageType, PostsDataType} from './App';
-import state from './redux/state'
+import App from './App';
+import store from './redux/state'
 
-ReactDOM.render(
-    <App dialogsState={state.messages} profileState={state.profile} sidebarState={state.sidebar}/>,
-    document.getElementById('root')
-);
+export const rerender = () => {
+    ReactDOM.render(
+        <App
+            state={store.getState()}
+            dispatch={store.dispatch.bind(store)}
+        />,
+        document.getElementById('root')
+    )
+    ;
+}
+rerender();
+store.subscribe(rerender)

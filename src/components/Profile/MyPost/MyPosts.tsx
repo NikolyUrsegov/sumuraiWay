@@ -1,22 +1,32 @@
-import React from 'react';
+import React, {RefObject} from 'react';
 import s from './MyPosts.module.css'
 import Post from "./Post/Post";
-import {PostsDataType} from "../../../App";
+import {ActionsTypes, PostsDataType, AddPostAC, UpdateTextPostAC} from "../../../redux/state";
 
 type MyPostsPropsType = {
     postsData: PostsDataType[]
+    newTextPost: string
+    dispatch: (action: ActionsTypes) => void
 }
 
 const MyPosts = (props: MyPostsPropsType) => {
+    let newPostRef = React.createRef<HTMLTextAreaElement>()
+    const addNewPost = () => {
+     props.dispatch(AddPostAC(props.newTextPost))
+    }
+    const onPostChange = () => {
+        let newText = newPostRef.current? newPostRef.current?.value : ''
+        props.dispatch(UpdateTextPostAC(newText))
+    }
     return (
         <div className={s.postsBlock}>
             <h3>My posts</h3>
             <div>
                 <div>
-                    <textarea></textarea>
+                    <textarea onChange={onPostChange} ref={newPostRef} value={props.newTextPost}/>
                 </div>
                 <div>
-                    <button>Add new post</button>
+                    <button onClick={addNewPost}>Add new post</button>
                 </div>
             </div>
             <div className={s.posts}>
