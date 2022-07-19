@@ -9,16 +9,19 @@ type DialogsPropsType = {
     dialogsData: DialogType[]
     messagesData: MessageType[]
     newMessageText: string
-    dispatch: (action: ActionsTypes) => void
+    changeMessageText: (body: string) => void
+    clickSendNewMessage: () => void
 }
 
 const Dialogs = (props: DialogsPropsType) => {
+
+
     const onChangeMessageText = (e: ChangeEvent<HTMLTextAreaElement>) => {
         let body = e.currentTarget.value
-        props.dispatch(UpdateTextMessageAC(body))
+        props.changeMessageText(body)
     }
     const onClickSendNewMessage = () => {
-        props.dispatch(SendNewMessageAC())
+        props.clickSendNewMessage()
     }
 
     return (
