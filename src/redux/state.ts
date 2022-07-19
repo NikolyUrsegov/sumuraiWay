@@ -1,3 +1,7 @@
+import profileReducer, {AddPostAC, UpdateTextPostAC} from "./profileReducer";
+import messagesReducer, {SendNewMessageAC, UpdateTextMessageAC} from "./messagesReducer";
+import sidebarReducer from "./sidebarReducer";
+
 export type FriendType = {
     id: number
     name: string
@@ -16,29 +20,32 @@ export type PostsDataType = {
     post: string
     likeCount: number
 }
+export type ProfileType = {
+    postsData: PostsDataType[]
+    newTextPost: string
+}
+export type MessagesType = {
+    dialogsData: DialogType[]
+    messagesData: MessageType[]
+    newMessageText: string
+}
+export type SidebarType = {
+    friends: FriendType[]
+
+}
 export type StateType = {
-    messages: {
-        dialogsData: DialogType[]
-        messagesData: MessageType[]
-    }
-    profile: {
-        postsData: PostsDataType[]
-        newTextPost: string
-    }
-    sidebar: {
-        friends: FriendType[]
-    }
+    messages: MessagesType
+    profile: ProfileType
+    sidebar: SidebarType
 }
 type StoreType = {
     _state: StateType
-    _addPost: (newPost: string) => void
-    _updateTextPost: (newText: string) => void
-    subscribe: (observer: () => void) => void
     _rerender: () => void
+    subscribe: (observer: () => void) => void
     getState: () => StateType
     dispatch: (action: ActionsTypes) => void
 }
-export type ActionsTypes = AddPostACType | UpdateTextPostACType
+export type ActionsTypes = AddPostACType | UpdateTextPostACType | UpdateTextMessageACType | SendNewMessageACType
 
 let store: StoreType = {
     _state: {
@@ -58,7 +65,8 @@ let store: StoreType = {
                 {id: 4, message: 'jkl'},
                 {id: 5, message: 'ghj'},
                 {id: 6, message: 'hjhjk'},
-            ]
+            ],
+            newMessageText: ''
         },
         profile: {
             postsData: [
@@ -94,20 +102,6 @@ let store: StoreType = {
     },
     _rerender() {
     },
-    _addPost(text) {
-        let post = {
-            id: this._state.profile.postsData.length + 1,
-            post: text,
-            likeCount: 0
-        }
-        this._state.profile.postsData.push(post)
-        this._state.profile.newTextPost = ''
-        this._rerender()
-    },
-    _updateTextPost(newText) {
-        this._state.profile.newTextPost = newText
-        this._rerender()
-    },
     subscribe(observer) {
         this._rerender = observer
     },
@@ -115,34 +109,16 @@ let store: StoreType = {
         return this._state
     },
     dispatch(action) {
-        switch (action.type) {
-            case 'ADD-NEW-POST':
-                this._addPost(action.text)
-                break
-            case 'UPDATE-TEXT-POST':
-                this._updateTextPost(action.text)
-                break
-            default:
-                alert('error')
-        }
+        this._state.profile = profileReducer(this._state.profile, action)
+        this._state.messages = messagesReducer(this._state.messages, action)
+        this._state.sidebar = sidebarReducer(this._state.sidebar, action)
+        this._rerender()
     }
 
 }
-
 type AddPostACType = ReturnType<typeof AddPostAC>
-export const AddPostAC = (post: string) => {
-    return ({
-        type: 'ADD-NEW-POST',
-        text: post
-    }) as const
-}
-
 type UpdateTextPostACType = ReturnType<typeof UpdateTextPostAC>
-export const UpdateTextPostAC = (newText: string) => {
-    return ({
-        type: 'UPDATE-TEXT-POST',
-        text: newText
-    }) as const
-}
+type UpdateTextMessageACType = ReturnType<typeof UpdateTextMessageAC>
+type SendNewMessageACType = ReturnType<typeof SendNewMessageAC>
 
 export default store;
