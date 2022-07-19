@@ -1,5 +1,17 @@
-import {ActionsTypes, MessagesType} from "./state";
-let messages = {
+export type DialogType = {
+    id: number
+    name: string
+}
+export type MessageType = {
+    id: number
+    message: string
+}
+export type MessagesType = {
+    dialogsData: DialogType[]
+    messagesData: MessageType[]
+    newMessageText: string
+}
+let messages: MessagesType = {
     dialogsData: [
         {id: 1, name: 'Kolya'},
         {id: 2, name: 'Petya'},
@@ -8,7 +20,7 @@ let messages = {
         {id: 5, name: 'Vasya'},
         {id: 6, name: 'Kecha'}
     ],
-        messagesData: [
+    messagesData: [
         {id: 1, message: 'Hi'},
         {id: 2, message: 'Hi'},
         {id: 3, message: 'hjk'},
@@ -16,24 +28,34 @@ let messages = {
         {id: 5, message: 'ghj'},
         {id: 6, message: 'hjhjk'},
     ],
-        newMessageText: ''
+    newMessageText: ''
 }
 
 const messagesReducer = (state: MessagesType = messages, action: ActionsTypes) => {
     switch (action.type) {
-        case 'UPDATE-NEW-MESSAGE-TEXT':
-            state.newMessageText = action.body
-            return state
-        case 'SEND-NEW-MESSAGE':
+        case 'UPDATE-NEW-MESSAGE-TEXT': {
+            let stateCopy: MessagesType = {...state, newMessageText: action.body}
+            return stateCopy
+        }
+        case 'SEND-NEW-MESSAGE': {
             let id = state.messagesData.length + 1
             let newMessage = {id: id, message: state.newMessageText}
-            state.messagesData.push(newMessage)
-            state.newMessageText = ''
-            return state
+            let stateCopy: MessagesType = {
+                ...state,
+                messagesData: [...state.messagesData, newMessage],
+                newMessageText: ''
+            }
+            return stateCopy
+        }
         default:
             return state
     }
 }
+
+type ActionsTypes = UpdateTextMessageACType | SendNewMessageACType
+type UpdateTextMessageACType = ReturnType<typeof UpdateTextMessageAC>
+type SendNewMessageACType = ReturnType<typeof SendNewMessageAC>
+
 export const UpdateTextMessageAC = (newText: string) => {
     return ({
         type: 'UPDATE-NEW-MESSAGE-TEXT',

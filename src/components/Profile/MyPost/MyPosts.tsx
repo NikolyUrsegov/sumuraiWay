@@ -1,9 +1,7 @@
-import React, {ChangeEvent, RefObject} from 'react';
+import React, {ChangeEvent} from 'react';
+import { PostsDataType } from '../../../redux/profileReducer';
 import s from './MyPosts.module.css'
 import Post from "./Post/Post";
-import {ActionsTypes, PostsDataType} from "../../../redux/state";
-import {AddPostAC, UpdateTextPostAC} from "../../../redux/profileReducer";
-
 
 type MyPostsPropsType = {
     postsData: PostsDataType[]
@@ -18,6 +16,7 @@ const MyPosts = (props: MyPostsPropsType) => {
         props.addNewPost()
     }
     const onPostChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+
         let newText = e.currentTarget.value
         props.changeNewTextPost(newText)
 

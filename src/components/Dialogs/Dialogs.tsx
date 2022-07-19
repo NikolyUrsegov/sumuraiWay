@@ -2,20 +2,9 @@ import React, {ChangeEvent} from 'react';
 import s from './Dialog.module.css'
 import DialogItem from "./DialogItem/DialogItem";
 import Message from "./Message/Message";
-import {ActionsTypes, DialogType, MessageType} from "../../redux/state";
-import {SendNewMessageAC, UpdateTextMessageAC} from "../../redux/messagesReducer";
-
-type DialogsPropsType = {
-    dialogsData: DialogType[]
-    messagesData: MessageType[]
-    newMessageText: string
-    changeMessageText: (body: string) => void
-    clickSendNewMessage: () => void
-}
+import {DialogsPropsType} from "./DialogContainer";
 
 const Dialogs = (props: DialogsPropsType) => {
-
-
     const onChangeMessageText = (e: ChangeEvent<HTMLTextAreaElement>) => {
         let body = e.currentTarget.value
         props.changeMessageText(body)
@@ -23,7 +12,6 @@ const Dialogs = (props: DialogsPropsType) => {
     const onClickSendNewMessage = () => {
         props.clickSendNewMessage()
     }
-
     return (
         <div className={s.dialogs}>
             <div className={s.dialogsItems}>
