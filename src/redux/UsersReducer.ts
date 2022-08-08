@@ -18,13 +18,15 @@ export type UsersStateType = {
     usersCount: number
     pageSize: number
     currentPage: number
+    isLoading: boolean
 }
 
 let initialState : UsersStateType = {
     users: [],
     usersCount: 0,
     pageSize: 5,
-    currentPage: 1
+    currentPage: 1,
+    isLoading: false
 }
 
 const UsersReducer = (state: UsersStateType = initialState, action: ActionsTypes) => {
@@ -61,17 +63,24 @@ const UsersReducer = (state: UsersStateType = initialState, action: ActionsTypes
                 ...state, currentPage: action.payload.currentPage
             }
         }
+        case "TOGGLE_IS_LOADING": {
+            return {
+                ...state,
+                isLoading: action.payload.isLoading
+            }
+        }
         default:
             return state
     }
 }
 
-type ActionsTypes = FollowACType | UnFollowACType | SetUsersACType | UsersCountACType | CurrentPageACType
+type ActionsTypes = FollowACType | UnFollowACType | SetUsersACType | UsersCountACType | CurrentPageACType | toggleLoadingACType
 type FollowACType = ReturnType<typeof FollowAC>
 type UnFollowACType = ReturnType<typeof UnFollowAC>
 type SetUsersACType = ReturnType<typeof SetUsersAC>
 type UsersCountACType = ReturnType<typeof UsersCountAC>
 type CurrentPageACType = ReturnType<typeof CurrentPageAC>
+type toggleLoadingACType = ReturnType<typeof toggleLoadingAC>
 
 
 export const FollowAC = (userId: number) => {
@@ -111,6 +120,14 @@ export const CurrentPageAC = (currentPage: number) => {
         type: 'CURRENT_PAGE',
         payload: {
             currentPage: currentPage
+        }
+    }) as const
+}
+export const toggleLoadingAC = (isLoading: boolean) => {
+    return ({
+        type: 'TOGGLE_IS_LOADING',
+        payload: {
+            isLoading: isLoading
         }
     }) as const
 }

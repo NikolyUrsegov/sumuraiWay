@@ -3,10 +3,33 @@ export type PostsDataType = {
     post: string
     likeCount: number
 }
+export type ProfileUserType = {
+    aboutMe: string
+    contacts: {
+        facebook: string | null
+        website: string | null
+        vk: string | null
+        twitter: string | null
+        instagram: string | null
+        youtube: string | null
+        github: string | null
+        mainLink: string | null
+    }
+    lookingForAJob: boolean
+    lookingForAJobDescription: string
+    fullName: string
+    userId: number
+    photos:{
+        small: string
+        large: string
+    }
+}
 export type ProfileType = {
     postsData: PostsDataType[]
     newTextPost: string
+    profileUser: ProfileUserType | null
 }
+
 
 let profile: ProfileType = {
     postsData: [
@@ -17,7 +40,8 @@ let profile: ProfileType = {
         {id: 5, post: 'Vasya', likeCount: 133},
         {id: 6, post: 'Kecha', likeCount: 1678}
     ],
-    newTextPost: ''
+    newTextPost: '',
+    profileUser: null
 }
 
 const profileReducer = (state: ProfileType = profile, action: ActionsTypes) => {
@@ -39,14 +63,21 @@ const profileReducer = (state: ProfileType = profile, action: ActionsTypes) => {
             let stateCopy: ProfileType = {...state, newTextPost: action.text}
             return stateCopy
         }
+        case "SET_USER_PROFILE": {
+            return {
+                ...state,
+                profileUser: action.profile
+            }
+        }
         default:
             return state
     }
 }
 
-type ActionsTypes = AddPostACType | UpdateTextPostACType
+type ActionsTypes = AddPostACType | UpdateTextPostACType | SetUserProfileACType
 type AddPostACType = ReturnType<typeof AddPostAC>
 type UpdateTextPostACType = ReturnType<typeof UpdateTextPostAC>
+type SetUserProfileACType = ReturnType<typeof setUserProfileAC>
 
 export const AddPostAC = () => {
     return ({
@@ -59,5 +90,13 @@ export const UpdateTextPostAC = (newText: string) => {
         text: newText
     }) as const
 }
+export const setUserProfileAC = (profile: ProfileUserType) => {
+    return ({
+        type: 'SET_USER_PROFILE',
+        profile
+    }) as const
+}
 
 export default profileReducer;
+
+

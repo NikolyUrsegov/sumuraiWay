@@ -2,11 +2,11 @@ import React from 'react';
 import './App.css';
 import Header from "./components/Header/Header";
 import NavBar from "./components/Navbar/NavBar";
-import Profile from "./components/Profile/Profile";
 import {Route} from "react-router-dom";
 import {DialogContainer} from "./components/Dialogs/DialogContainer";
 import {ReduxStore} from "./redux/redux-store";
 import {UsersContainer} from "./components/Users/UsersContainer";
+import {ProfileContainer} from "./components/Profile/ProfileContainer";
 
 type AppPropsType = {
     store: ReduxStore
@@ -19,7 +19,7 @@ function App(props: AppPropsType) {
             <NavBar sidebar={props.store.getState().sidebar}/>
             <div className={'app-wrapper-content'}>
                 <Route path='/profile'
-                       render={() => <Profile/>}
+                       render={() => <ProfileContainer/>}
                 />
                 <Route path="/dialog"
                        render={() => <DialogContainer/>}
