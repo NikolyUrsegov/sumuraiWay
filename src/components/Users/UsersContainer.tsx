@@ -1,6 +1,5 @@
 import React from "react";
 import {connect} from "react-redux";
-import {Dispatch} from "redux";
 import {
     CurrentPageAC,
     FollowAC,
@@ -52,33 +51,14 @@ const mapStateToProps = (state: AppRootStateType): MapStateToPropsType => {
     }
 }
 
-// const mapDispatchToProps = (dispatch: Dispatch): MapDispatchToPropsType => {
-//     return {
-//         follow: (userId: number) => {
-//             dispatch(FollowAC(userId))
-//         },
-//         unFollow: (userId: number) => {
-//             dispatch(UnFollowAC(userId))
-//         },
-//         setUsers: (users: UserType[]) => {
-//             dispatch(SetUsersAC(users))
-//         },
-//         setUsersCount: (usersCount: number) => {
-//             dispatch(UsersCountAC(usersCount))
-//         },
-//         setCurrentPage: (currentPage: number) => {
-//             dispatch(CurrentPageAC(currentPage))
-//         },
-//         toggleIsLoading: (isLoading: boolean) => {
-//             dispatch(toggleLoadingAC(isLoading))
-//         }
-//     }
-// }
 
 class UsersContainerAPI extends React.Component<UsersContainerPropsType> {
     componentDidMount() {
         this.props.toggleIsLoading(true)
-        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${this.props.currentPage}&count=${this.props.pageSize}`)
+        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${this.props.currentPage}&count=${this.props.pageSize}`,
+            {
+                withCredentials: true
+            })
             .then(response => {
                     this.props.toggleIsLoading(false)
                     this.props.setUsers(response.data.items)
