@@ -1,6 +1,7 @@
 import React from 'react';
 import s from "./Users.module.css";
 import {UsersPropsType} from "./UsersContainer";
+import {NavLink} from "react-router-dom";
 
 const Users = (props: UsersPropsType) => {
     let pages = []
@@ -13,15 +14,17 @@ const Users = (props: UsersPropsType) => {
             <div>
                 {pages.map(p =>
                     <span key={p}
-                        className={props.currentPage === p ? s.activePage : ''}
-                        onClick={() => props.onPageChanged(p)}
+                          className={props.currentPage === p ? s.activePage : ''}
+                          onClick={() => props.onPageChanged(p)}
                     >{p}__</span>)}
             </div>
             {props.users.map(u =>
                 <div className={s.usersBlock} key={u.id}>
                     <div>
                         <div>
-                            <img src={u.photos.small} className={s.photo}/>
+                            <NavLink to={`/profile/${u.id}`}>
+                                <img src={u.photos.small} className={s.photo}/>
+                            </NavLink>
                         </div>
                         <div>
                             {u.follow
