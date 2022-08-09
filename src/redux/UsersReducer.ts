@@ -19,14 +19,16 @@ export type UsersStateType = {
     pageSize: number
     currentPage: number
     isLoading: boolean
+    isFollowedProgress: number[]
 }
 
-let initialState : UsersStateType = {
+let initialState: UsersStateType = {
     users: [],
     usersCount: 0,
     pageSize: 5,
     currentPage: 1,
-    isLoading: false
+    isLoading: false,
+    isFollowedProgress: []
 }
 
 const UsersReducer = (state: UsersStateType = initialState, action: ActionsTypes) => {
@@ -39,7 +41,7 @@ const UsersReducer = (state: UsersStateType = initialState, action: ActionsTypes
                 )
             }
         }
-        case "UNFOLLOW":{
+        case "UNFOLLOW": {
             return {
                 ...state, users: state.users.map(u => u.id === action.payload.userId
                     ? {...u, follow: false}
@@ -69,14 +71,30 @@ const UsersReducer = (state: UsersStateType = initialState, action: ActionsTypes
                 isLoading: action.payload.isLoading
             }
         }
+        case "IS_FOLLOWED_PROGRESS": {
+            return {
+                ...state,
+                isFollowedProgress: action.payload.isFollowed
+                    ? [...state.isFollowedProgress, action.payload.userId]
+                    : state.isFollowedProgress.filter(id => id != action.payload.userId)
+            }
+        }
         default:
             return state
     }
 }
 
-type ActionsTypes = FollowACType | UnFollowACType | SetUsersACType | UsersCountACType | CurrentPageACType | toggleLoadingACType
+type ActionsTypes =
+    FollowACType
+    | UnFollowACType
+    | SetUsersACType
+    | UsersCountACType
+    | CurrentPageACType
+    | toggleLoadingACType
+    | isFollowedProgressACType
 type FollowACType = ReturnType<typeof FollowAC>
 type UnFollowACType = ReturnType<typeof UnFollowAC>
+type isFollowedProgressACType = ReturnType<typeof isFollowedProgressAC>
 type SetUsersACType = ReturnType<typeof SetUsersAC>
 type UsersCountACType = ReturnType<typeof UsersCountAC>
 type CurrentPageACType = ReturnType<typeof CurrentPageAC>
@@ -96,6 +114,15 @@ export const UnFollowAC = (userId: number) => {
         type: 'UNFOLLOW',
         payload: {
             userId
+        }
+    }) as const
+}
+export const isFollowedProgressAC = (isFollowed: boolean, userId: number) => {
+    return ({
+        type: 'IS_FOLLOWED_PROGRESS',
+        payload: {
+            userId,
+            isFollowed
         }
     }) as const
 }
