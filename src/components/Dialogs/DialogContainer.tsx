@@ -4,6 +4,7 @@ import {AppRootStateType} from "../../redux/redux-store";
 import Dialogs from "./Dialogs";
 import {connect} from "react-redux";
 import {Dispatch} from "redux";
+import WithAuthRedirectContainer from "../../hoc/WithAuthRedirectContainer";
 
 type MapStatePropsType = {
     dialogsData: DialogType[]
@@ -23,15 +24,11 @@ const mapStateToProps = (state: AppRootStateType): MapStatePropsType => {
         newMessageText: state.messages.newMessageText
     }
 }
-const mapDispatchToProps = (dispatch: Dispatch): MapDispatchPropsType => {
-    return {
-        changeMessageText: (body: string) => {
-            dispatch(UpdateTextMessageAC(body))
-        },
-        clickSendNewMessage: () => {
-            dispatch(SendNewMessageAC())
-        }
+
+export const DialogContainer = WithAuthRedirectContainer(connect(mapStateToProps,
+    {
+        changeMessageText: UpdateTextMessageAC,
+        clickSendNewMessage: SendNewMessageAC
     }
-}
-export const DialogContainer = connect(mapStateToProps, mapDispatchToProps)(Dialogs)
+)(Dialogs))
 

@@ -35,9 +35,6 @@ const mapStateToProps = (state: AppRootStateType): MapStateToPropsType => {
         isAuth: state.auth.isAuth
     }
 }
-const mapDispatchToProps = (dispatch: Dispatch): MapDispatchToPropsType => {
-    return{
-        SetAuthUserData: setAuthUserDataTC
-    }
-}
-export const HeaderContainer = connect(mapStateToProps, mapDispatchToProps)(HeaderAuthContainer)
+
+export const HeaderContainer = connect(mapStateToProps,{SetAuthUserData: setAuthUserDataTC})
+(HeaderAuthContainer)
