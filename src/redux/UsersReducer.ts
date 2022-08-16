@@ -1,10 +1,13 @@
+import {Dispatch} from "redux";
+import {userAPI} from "../api/api";
+
 export type UserType = {
     id: number
     photos: {
         small: string
         large: string
     }
-    follow: boolean
+    followed: boolean
     name: string
     status: string
     location: {
@@ -36,7 +39,7 @@ const UsersReducer = (state: UsersStateType = initialState, action: ActionsTypes
         case "FOLLOW": {
             return {
                 ...state, users: state.users.map(u => u.id === action.payload.userId
-                    ? {...u, follow: true}
+                    ? {...u, followed: true}
                     : u
                 )
             }
@@ -44,7 +47,7 @@ const UsersReducer = (state: UsersStateType = initialState, action: ActionsTypes
         case "UNFOLLOW": {
             return {
                 ...state, users: state.users.map(u => u.id === action.payload.userId
-                    ? {...u, follow: false}
+                    ? {...u, followed: false}
                     : u
                 )
             }
@@ -96,9 +99,9 @@ type FollowACType = ReturnType<typeof FollowAC>
 type UnFollowACType = ReturnType<typeof UnFollowAC>
 type isFollowedProgressACType = ReturnType<typeof isFollowedProgressAC>
 type SetUsersACType = ReturnType<typeof SetUsersAC>
-type UsersCountACType = ReturnType<typeof UsersCountAC>
+type UsersCountACType = ReturnType<typeof SetUsersCountAC>
 type CurrentPageACType = ReturnType<typeof CurrentPageAC>
-type toggleLoadingACType = ReturnType<typeof toggleLoadingAC>
+type toggleLoadingACType = ReturnType<typeof ToggleLoadingAC>
 
 
 export const FollowAC = (userId: number) => {
@@ -134,7 +137,7 @@ export const SetUsersAC = (users: UserType[]) => {
         }
     }) as const
 }
-export const UsersCountAC = (usersCount: number) => {
+export const SetUsersCountAC = (usersCount: number) => {
     return ({
         type: 'USERS_COUNT',
         payload: {
@@ -150,7 +153,7 @@ export const CurrentPageAC = (currentPage: number) => {
         }
     }) as const
 }
-export const toggleLoadingAC = (isLoading: boolean) => {
+export const ToggleLoadingAC = (isLoading: boolean) => {
     return ({
         type: 'TOGGLE_IS_LOADING',
         payload: {
@@ -159,4 +162,32 @@ export const toggleLoadingAC = (isLoading: boolean) => {
     }) as const
 }
 
+export const getUsersThunkCreate = (currentPage: number, pageSize: number) => (dispatch: Dispatch) => {
+    dispatch(ToggleLoadingAC(true))
+    userAPI.getUsers(currentPage, pageSize)
+        .then(response => {
+                dispatch(ToggleLoadingAC(false))
+                dispatch(SetUsersAC(response.items))
+                dispatch(SetUsersCountAC(response.totalCount))
+            }
+        )
+}
+export const followThunkCreate = (userId: number) => (dispatch: Dispatch) => {
+    dispatch(isFollowedProgressAC(true, userId))
+    userAPI.postFollowUser(userId)
+        .then(response => {
+                if (response.resultCode === 0) dispatch(FollowAC(userId))
+                dispatch(isFollowedProgressAC(false, userId))
+            }
+        )
+}
+export const unFollowThunkCreate = (userId: number) => (dispatch: Dispatch) => {
+    dispatch(isFollowedProgressAC(true, userId))
+    userAPI.deleteUnFollowUser(userId)
+        .then(response => {
+                if (response.resultCode === 0) dispatch(UnFollowAC(userId))
+                dispatch(isFollowedProgressAC(false, userId))
+            }
+        )
+}
 export default UsersReducer;

@@ -1,4 +1,5 @@
-import {combineReducers, createStore} from "redux";
+import {applyMiddleware, combineReducers, createStore} from "redux";
+import thunkMiddleware from 'redux-thunk';
 import messagesReducer from "./messagesReducer";
 import ProfileReducer from "./profileReducer";
 import sidebarReducer from "./sidebarReducer";
@@ -13,7 +14,7 @@ let rootReducer = combineReducers({
     users: UsersReducer,
     auth: AuthReducer
 })
-export let store = createStore(rootReducer)
+export let store = createStore(rootReducer, applyMiddleware(thunkMiddleware))
 
 export type ReduxStore = typeof store;
 export type AppRootStateType = ReturnType<typeof rootReducer>
