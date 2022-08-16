@@ -166,6 +166,7 @@ export const getUsersThunkCreate = (currentPage: number, pageSize: number) => (d
     dispatch(ToggleLoadingAC(true))
     userAPI.getUsers(currentPage, pageSize)
         .then(response => {
+            console.log(response)
                 dispatch(ToggleLoadingAC(false))
                 dispatch(SetUsersAC(response.items))
                 dispatch(SetUsersCountAC(response.totalCount))

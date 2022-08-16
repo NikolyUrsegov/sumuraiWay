@@ -31,6 +31,7 @@ export type ProfileType = {
     postsData: PostsDataType[]
     newTextPost: string
     profileUser: ProfileUserType | null
+    status: string
 }
 
 
@@ -44,7 +45,8 @@ let profile: ProfileType = {
         {id: 6, post: 'Kecha', likeCount: 1678}
     ],
     newTextPost: '',
-    profileUser: null
+    profileUser: null,
+    status: ''
 }
 
 const profileReducer = (state: ProfileType = profile, action: ActionsTypes) => {
@@ -72,15 +74,22 @@ const profileReducer = (state: ProfileType = profile, action: ActionsTypes) => {
                 profileUser: action.profile
             }
         }
+        case "SET_USER_PROFILE_STATUS": {
+            return {
+                ...state,
+                status: action.status
+            }
+        }
         default:
             return state
     }
 }
 
-type ActionsTypes = AddPostACType | UpdateTextPostACType | SetUserProfileACType
+type ActionsTypes = AddPostACType | UpdateTextPostACType | SetUserProfileACType | SetUserProfileStatusACType
 type AddPostACType = ReturnType<typeof AddPostAC>
 type UpdateTextPostACType = ReturnType<typeof UpdateTextPostAC>
 type SetUserProfileACType = ReturnType<typeof setUserProfileAC>
+type SetUserProfileStatusACType = ReturnType<typeof setUserProfileStatusAC>
 
 export const AddPostAC = () => {
     return ({
@@ -99,8 +108,14 @@ export const setUserProfileAC = (profile: ProfileUserType) => {
         profile
     }) as const
 }
+export const setUserProfileStatusAC = (status: string) => {
+    return ({
+        type: 'SET_USER_PROFILE_STATUS',
+        status
+    }) as const
+}
 
-export const setUserProfileTC = (userId: string) => (dispatch: Dispatch) => {
+export const getUserProfileTC = (userId: string) => (dispatch: Dispatch) => {
     if (!userId) userId = '24899'
     profileAPI.getProfileUser(userId)
         .then(response => {
@@ -108,6 +123,23 @@ export const setUserProfileTC = (userId: string) => (dispatch: Dispatch) => {
             }
         )
 }
+export const getUserProfileStatusTC = (userId: string) => (dispatch: Dispatch) => {
+    if (!userId) userId = '24899'
+    profileAPI.getProfileStatus(userId)
+        .then(response => {
+                dispatch(setUserProfileStatusAC(response.data))
+            }
+        )
+}
+export const updateUserProfileStatusTC = (status: string) => (dispatch: Dispatch) => {
+    profileAPI.putProfileStatus(status)
+        .then(response => {
+            response.data.resultCode === 0 && dispatch(setUserProfileStatusAC(status))
+            }
+        )
+}
+
+
 export default profileReducer;
 
 
