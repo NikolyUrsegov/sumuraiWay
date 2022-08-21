@@ -18,7 +18,6 @@ export type ProfilePropsType = {
     updateUserProfileStatus: (status: string) => void
 }
 export type ProfileInfoPropsType = ProfilePropsType
-
 export type ProfileStatusPropsType = {
     status: string
     updateUserProfileStatus: (status: string) => void
@@ -31,6 +30,7 @@ type ProfileContainerAPIPropsType = MapStateToPropsType & {
     updateUserProfileStatus: (status: string) => void
     params: { userId: string }
 }
+
 
 class ProfileContainerAPI extends React.Component<ProfileContainerAPIPropsType> {
     componentDidMount() {

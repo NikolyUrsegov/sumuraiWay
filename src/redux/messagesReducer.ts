@@ -9,7 +9,6 @@ export type MessageType = {
 export type MessagesType = {
     dialogsData: DialogType[]
     messagesData: MessageType[]
-    newMessageText: string
 }
 let messages: MessagesType = {
     dialogsData: [
@@ -28,22 +27,16 @@ let messages: MessagesType = {
         {id: 5, message: 'ghj'},
         {id: 6, message: 'hjhjk'},
     ],
-    newMessageText: ''
 }
 
 const messagesReducer = (state: MessagesType = messages, action: ActionsTypes) => {
     switch (action.type) {
-        case 'UPDATE-NEW-MESSAGE-TEXT': {
-            let stateCopy: MessagesType = {...state, newMessageText: action.body}
-            return stateCopy
-        }
         case 'SEND-NEW-MESSAGE': {
             let id = state.messagesData.length + 1
-            let newMessage = {id: id, message: state.newMessageText}
+            let newMessage = {id: id, message: action.body}
             let stateCopy: MessagesType = {
                 ...state,
                 messagesData: [...state.messagesData, newMessage],
-                newMessageText: ''
             }
             return stateCopy
         }
@@ -52,19 +45,14 @@ const messagesReducer = (state: MessagesType = messages, action: ActionsTypes) =
     }
 }
 
-type ActionsTypes = UpdateTextMessageACType | SendNewMessageACType
-type UpdateTextMessageACType = ReturnType<typeof UpdateTextMessageAC>
+type ActionsTypes =  SendNewMessageACType
 type SendNewMessageACType = ReturnType<typeof SendNewMessageAC>
 
-export const UpdateTextMessageAC = (newText: string) => {
-    return ({
-        type: 'UPDATE-NEW-MESSAGE-TEXT',
-        body: newText
-    }) as const
-}
-export const SendNewMessageAC = () => {
+
+export const SendNewMessageAC = (newText: string) => {
     return ({
         type: 'SEND-NEW-MESSAGE',
+        body: newText
     }) as const
 }
 export default messagesReducer;

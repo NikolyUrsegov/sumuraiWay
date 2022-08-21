@@ -2,7 +2,6 @@ import React from 'react';
 import s from "./Users.module.css";
 import {UsersPropsType} from "./UsersContainer";
 import {NavLink} from "react-router-dom";
-import {userAPI} from "../../api/api";
 
 const Users = (props: UsersPropsType) => {
     let pages = []

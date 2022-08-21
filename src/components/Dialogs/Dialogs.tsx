@@ -3,14 +3,28 @@ import s from './Dialog.module.css'
 import DialogItem from "./DialogItem/DialogItem";
 import Message from "./Message/Message";
 import {DialogsPropsType} from "./DialogContainer";
+import {Field, InjectedFormProps, reduxForm} from "redux-form";
+
+const MessageForm = (props: InjectedFormProps<MessageFormData>) => {
+    return (
+        <form onSubmit={props.handleSubmit}>
+            <div>
+                <Field component={'textarea'} name={'message'} placeholder={'...Message'}/>
+            </div>
+            <div>
+                <button >SEND</button>
+            </div>
+        </form>
+    )
+}
+
+const MessageReduxForm = reduxForm<MessageFormData>({form: 'message'})(MessageForm)
+
 
 const Dialogs = (props: DialogsPropsType) => {
-    const onChangeMessageText = (e: ChangeEvent<HTMLTextAreaElement>) => {
-        let body = e.currentTarget.value
-        props.changeMessageText(body)
-    }
-    const onClickSendNewMessage = () => {
-        props.clickSendNewMessage()
+
+    const onClickSendNewMessage = (dataForm: MessageFormData) => {
+        props.clickSendNewMessage(dataForm.message)
     }
     return (
         <div className={s.dialogs}>
@@ -24,18 +38,18 @@ const Dialogs = (props: DialogsPropsType) => {
                     {props.messagesData.map(el => (
                         <Message message={el.message} key={el.id}/>
                     ))}
+                    <MessageReduxForm onSubmit={onClickSendNewMessage}/>
                 </div>
-                <div>
-                    <div>
-                        <textarea value={props.newMessageText} onChange={onChangeMessageText}/>
-                    </div>
-                    <div>
-                        <button onClick={onClickSendNewMessage}>SEND</button>
-                    </div>
-                </div>
+
             </div>
         </div>
     );
 };
+
+type MessageFormData = {
+    message: string
+}
+
+
 
 export default Dialogs;

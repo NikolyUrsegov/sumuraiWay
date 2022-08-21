@@ -5,6 +5,7 @@ import ProfileReducer from "./profileReducer";
 import sidebarReducer from "./sidebarReducer";
 import UsersReducer from "./UsersReducer";
 import AuthReducer from "./authReducer";
+import { reducer as formReducer } from 'redux-form'
 
 
 let rootReducer = combineReducers({
@@ -12,7 +13,8 @@ let rootReducer = combineReducers({
     profile: ProfileReducer,
     sidebar: sidebarReducer,
     users: UsersReducer,
-    auth: AuthReducer
+    auth: AuthReducer,
+    form: formReducer
 })
 export let store = createStore(rootReducer, applyMiddleware(thunkMiddleware))
 
