@@ -13,7 +13,10 @@ const Header = (props: HeaderPropsType) => {
                     ? <NavLink to={'/login'}>
                         Login
                     </NavLink>
-                    : <span>{props.login}</span>
+                    : <div>
+                        <button onClick={() => props.logout()}>logout</button>
+                        <span>{props.login}</span>
+                    </div>
             }
             </div>
 

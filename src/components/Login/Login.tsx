@@ -1,19 +1,23 @@
 import React from 'react';
 import {Field, InjectedFormProps, reduxForm} from "redux-form";
-import axios from "axios";
+import {connect} from "react-redux";
+import {loginUserDataTC, setAuthUserDataTC} from "../../redux/authReducer";
 
-type DataFormType = {
-    login: string
+export type DataLoginType = {
+    email: string
     password: string
     rememberMe: boolean
 }
+type LoginPropsType = {
+    loginUserData: (data: DataLoginType) => void
+}
 
 
-const LoginForm: React.FC<InjectedFormProps<DataFormType>> = (props) => {
+const LoginForm: React.FC<InjectedFormProps<DataLoginType>> = (props) => {
     return (
         <form onSubmit={props.handleSubmit}>
             <div>
-                <Field placeholder={'login'} name={'login'} component={'input'}/>
+                <Field placeholder={'login'} name={'email'} component={'input'}/>
             </div>
             <div>
                 <Field placeholder={'password'} name={'password'} component={'input'}/>
@@ -21,6 +25,11 @@ const LoginForm: React.FC<InjectedFormProps<DataFormType>> = (props) => {
             <div>
                 <Field name={'rememberMe'} type={'checkbox'} component={'input'}/>
             </div>
+            {props.error &&
+                <div>
+                    <h3>{props.error}</h3>
+                </div>
+            }
             <div>
                 <button>Login</button>
             </div>
@@ -28,16 +37,11 @@ const LoginForm: React.FC<InjectedFormProps<DataFormType>> = (props) => {
     )
 
 }
-const LoginReduxForm = reduxForm<DataFormType>({form: 'login'})(LoginForm)
+const LoginReduxForm = reduxForm<DataLoginType>({form: 'login'})(LoginForm)
 
-const Login = () => {
-    const onSubmit = (dataForm: DataFormType) => {
-        axios.post('https://social-network.samuraijs.com/api/1.0/auth/login', {
-            email: dataForm.login,
-            password: dataForm.password,
-            rememberMe: dataForm.rememberMe,
-            captcha: true
-        }).then(res => console.log(res))
+const Login = (props: LoginPropsType) => {
+    const onSubmit = (dataLogin: DataLoginType) => {
+        props.loginUserData(dataLogin)
     }
     return (
         <div>
@@ -51,4 +55,7 @@ const Login = () => {
 };
 
 
-export default Login;
+export default connect(() => {
+    return {}
+}, {loginUserData: loginUserDataTC})
+(Login)

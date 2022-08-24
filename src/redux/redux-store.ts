@@ -1,5 +1,5 @@
-import {applyMiddleware, combineReducers, createStore} from "redux";
-import thunkMiddleware from 'redux-thunk';
+import {AnyAction, applyMiddleware, combineReducers, createStore} from "redux";
+import thunkMiddleware, {ThunkDispatch} from 'redux-thunk';
 import messagesReducer from "./messagesReducer";
 import ProfileReducer from "./profileReducer";
 import sidebarReducer from "./sidebarReducer";
@@ -20,5 +20,8 @@ export let store = createStore(rootReducer, applyMiddleware(thunkMiddleware))
 
 export type ReduxStore = typeof store;
 export type AppRootStateType = ReturnType<typeof rootReducer>
+export type AppThunk = ThunkDispatch<AppRootStateType, unknown, AnyAction>
+
+
 // @ts-ignore
 window.store = store;

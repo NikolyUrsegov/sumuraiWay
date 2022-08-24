@@ -2,22 +2,22 @@ import React from 'react';
 import s from "./Users.module.css";
 import {UsersPropsType} from "./UsersContainer";
 import {NavLink} from "react-router-dom";
+import ReactPaginate from 'react-paginate';
+
 
 const Users = (props: UsersPropsType) => {
-    let pages = []
     let numberPages = Math.ceil(props.usersCount / props.pageSize)
-    for (let i = 1; i <= numberPages; i++) {
-        pages.push(i)
-    }
     return (
         <>
-            <div>
-                {pages.map(p =>
-                    <span key={p}
-                          className={props.currentPage === p ? s.activePage : ''}
-                          onClick={() => props.onPageChanged(p)}
-                    >{p}__</span>)}
-            </div>
+            <ReactPaginate
+                breakLabel="..."
+                nextLabel="next >"
+                onPageChange={(event) => props.onPageChanged(event.selected)}
+                pageRangeDisplayed={props.pageSize}
+                pageCount={numberPages}
+                previousLabel="< previous"
+                forcePage={props.currentPage}
+            />
             {props.users.map(u =>
                 <div className={s.usersBlock} key={u.id}>
                     <div>
