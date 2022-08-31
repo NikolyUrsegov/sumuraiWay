@@ -34,7 +34,7 @@ let initialState: UsersStateType = {
     isFollowedProgress: []
 }
 
-const UsersReducer = (state: UsersStateType = initialState, action: ActionsTypes) => {
+const UsersReducer = (state: UsersStateType = initialState, action: ActionUsersTypes) => {
     switch (action.type) {
         case "FOLLOW": {
             return {
@@ -87,7 +87,7 @@ const UsersReducer = (state: UsersStateType = initialState, action: ActionsTypes
     }
 }
 
-type ActionsTypes =
+export type ActionUsersTypes =
     FollowACType
     | UnFollowACType
     | SetUsersACType

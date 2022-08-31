@@ -29,7 +29,7 @@ let messages: MessagesType = {
     ],
 }
 
-const messagesReducer = (state: MessagesType = messages, action: ActionsTypes) => {
+const messagesReducer = (state: MessagesType = messages, action: ActionMessagesTypes) => {
     switch (action.type) {
         case 'SEND-NEW-MESSAGE': {
             let id = state.messagesData.length + 1
@@ -45,7 +45,7 @@ const messagesReducer = (state: MessagesType = messages, action: ActionsTypes) =
     }
 }
 
-type ActionsTypes =  SendNewMessageACType
+export type ActionMessagesTypes =  SendNewMessageACType
 type SendNewMessageACType = ReturnType<typeof SendNewMessageAC>
 
 

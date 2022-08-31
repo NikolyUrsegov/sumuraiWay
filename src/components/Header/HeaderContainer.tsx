@@ -12,7 +12,7 @@ type MapStateToPropsType = {
     isAuth: boolean
 }
 type MapDispatchToPropsType = {
-    SetAuthUserData: () => void
+    setAuthUserData: () => void
     logoutUserData: () => void
 }
 export type HeaderPropsType = {
@@ -23,9 +23,6 @@ export type HeaderPropsType = {
 type HeaderAuthContainerType = MapStateToPropsType & MapDispatchToPropsType
 
 class HeaderAuthContainer extends React.Component<HeaderAuthContainerType>{
-    componentDidMount() {
-        this.props.SetAuthUserData()
-    }
     render() {
         return <Header isAuth={this.props.isAuth} login={this.props.date.login} logout={this.props.logoutUserData}/>
     }
@@ -38,5 +35,5 @@ const mapStateToProps = (state: AppRootStateType): MapStateToPropsType => {
     }
 }
 
-export const HeaderContainer = connect(mapStateToProps,{SetAuthUserData: setAuthUserDataTC, logoutUserData: logoutUserDataTC})
+export const HeaderContainer = connect(mapStateToProps,{setAuthUserData: setAuthUserDataTC, logoutUserData: logoutUserDataTC})
 (HeaderAuthContainer)

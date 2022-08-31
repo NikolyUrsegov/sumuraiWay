@@ -12,6 +12,14 @@ import Users from "./Users";
 import Preloader from "../common/Preloader/Preloader";
 import WithAuthRedirectContainer from "../../hoc/WithAuthRedirectContainer";
 import {compose} from "redux";
+import {
+    getUsers,
+    getUsersCount,
+    getUsersCurrentPage,
+    getUsersIsFollowedProgress,
+    getUsersIsLoading,
+    getUsersPageSize
+} from "../../redux/selectors";
 
 type MapStateToPropsType = {
     users: UserType[]
@@ -48,12 +56,12 @@ export type UsersPropsType = {
 
 const mapStateToProps = (state: AppRootStateType): MapStateToPropsType => {
     return {
-        users: state.users.users,
-        usersCount: state.users.usersCount,
-        pageSize: state.users.pageSize,
-        currentPage: state.users.currentPage,
-        isLoading: state.users.isLoading,
-        isFollowed: state.users.isFollowedProgress
+        users: getUsers(state),
+        usersCount: getUsersCount(state),
+        pageSize: getUsersPageSize(state),
+        currentPage: getUsersCurrentPage(state),
+        isLoading: getUsersIsLoading(state),
+        isFollowed: getUsersIsFollowedProgress(state)
     }
 }
 
