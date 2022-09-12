@@ -1,4 +1,4 @@
-import React, {ChangeEvent} from 'react';
+import React from 'react';
 import { PostsDataType } from '../../../redux/profileReducer';
 import s from './MyPosts.module.css'
 import Post from "./Post/Post";
@@ -9,26 +9,28 @@ type MyPostsPropsType = {
     addNewPost: (body: string) => void
 }
 
-const MyPosts = (props: MyPostsPropsType) => {
+class MyPosts extends React.PureComponent<MyPostsPropsType> {
+    render() {
 
-    const addNewPost = (dataForm: PostFormDataType) => {
-        props.addNewPost(dataForm.post)
+        const addNewPost = (dataForm: PostFormDataType) => {
+            this.props.addNewPost(dataForm.post)
+        }
+
+        return (
+            <div className={s.postsBlock}>
+                <h3>My posts</h3>
+                <div>
+                    <PostReduxForm onSubmit={addNewPost}/>
+                </div>
+                <div className={s.posts}>
+                    {this.props.postsData.map(el => (
+                        <Post message={el.post} likeCount={el.likeCount} key={el.id}/>
+                    ))}
+                </div>
+            </div>
+        );
     }
-
-    return (
-        <div className={s.postsBlock}>
-            <h3>My posts</h3>
-            <div>
-                <PostReduxForm onSubmit={addNewPost}/>
-            </div>
-            <div className={s.posts}>
-                {props.postsData.map(el => (
-                    <Post message={el.post} likeCount={el.likeCount} key={el.id}/>
-                ))}
-            </div>
-        </div>
-    );
-};
+}
 
 type PostFormDataType = {
     post: string
